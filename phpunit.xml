@@ -12,7 +12,7 @@
          stopOnFailure="false">
 
     <testsuites>
-        <testsuite name="<PACKAGE-NAME>">
+        <testsuite name="Laravel Queue Job">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
