@@ -10,6 +10,9 @@ Laravel Queue Job
 
 Custom Job implementation for [vyuldashev/laravel-queue-rabbitmq](https://github.com/vyuldashev/laravel-queue-rabbitmq) library
 
+:warning: This library works on [vyuldashev/laravel-queue-rabbitmq](https://github.com/vyuldashev/laravel-queue-rabbitmq).
+If you have questions about how to configure connections, feel free to read the [vyuldashev/laravel-queue-rabbitmq](https://github.com/vyuldashev/laravel-queue-rabbitmq) documentation.
+
 Main features
 -------------
 
@@ -26,9 +29,6 @@ composer require softonic/laravel-queue-job
 
 Usage
 -------------
-
-:warning: This library works on [vyuldashev/laravel-queue-rabbitmq](https://github.com/vyuldashev/laravel-queue-rabbitmq).
-If you have questions about how to configure connections, feel free to read the [vyuldashev/laravel-queue-rabbitmq](https://github.com/vyuldashev/laravel-queue-rabbitmq) documentation.
 
 Replace your RabbitMQJob class in the queue config file.
 ```
