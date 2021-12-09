@@ -7,6 +7,8 @@ use VladimirYuldashev\LaravelQueueRabbitMQ\Queue\Jobs\RabbitMQJob as BaseJob;
 
 class RabbitMQJob extends BaseJob
 {
+    private const HANDLER_NOT_CONFIGURED_MESSAGE = 'HandlerNotConfigured';
+
     private array $messageHandlers = [];
 
     /**
@@ -18,12 +20,8 @@ class RabbitMQJob extends BaseJob
     {
         $this->messageHandlers = $this->getMessageHandlers($this->getRabbitMQMessage()->getRoutingKey());
 
-        if (empty($this->messageHandlers)) {
-            return [];
-        }
-
         return [
-            'job'  => $this->messageHandlers[0],
+            'job'  => $this->messageHandlers[0] ?? self::HANDLER_NOT_CONFIGURED_MESSAGE,
             'data' => json_decode($this->getRawBody(), true),
         ];
     }

@@ -154,7 +154,8 @@ class RabbitMQJobTest extends TestCase
             ->andReturn('#.non_existent_key');
 
         $this->amqpMessageMock
-            ->shouldNotReceive('getBody');
+            ->shouldReceive('getBody')
+            ->andReturn('');
 
         $this->rabbitmqMock
             ->shouldReceive('ack')->once();
