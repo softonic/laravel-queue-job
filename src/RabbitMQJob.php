@@ -18,6 +18,10 @@ class RabbitMQJob extends BaseJob
     {
         $this->messageHandlers = $this->getMessageHandlers($this->getRabbitMQMessage()->getRoutingKey());
 
+        if (empty($this->messageHandlers)) {
+            return [];
+        }
+
         return [
             'job'  => $this->messageHandlers[0],
             'data' => json_decode($this->getRawBody(), true),

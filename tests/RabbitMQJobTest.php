@@ -145,4 +145,30 @@ class RabbitMQJobTest extends TestCase
         Queue::assertPushed(TestHandlerOne::class);
         Queue::assertPushed(TestHandlerTwo::class);
     }
+
+    /** @test */
+    public function whenFireWithoutAssignedHandlerItShouldNotDispatchAnyHandler()
+    {
+        $this->amqpMessageMock
+            ->shouldReceive('getRoutingKey')
+            ->andReturn('#.non_existent_key');
+
+        $this->amqpMessageMock
+            ->shouldNotReceive('getBody');
+
+        $this->rabbitmqMock
+            ->shouldReceive('ack')->once();
+
+        $rabbitMqJob = new RabbitMQJob(
+            $this->containerMock,
+            $this->rabbitmqMock,
+            $this->amqpMessageMock,
+            'test-connection',
+            'test-queue'
+        );
+
+        $rabbitMqJob->fire();
+
+        Queue::assertNothingPushed();
+    }
 }
