@@ -8,12 +8,16 @@ Laravel Queue Job
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/softonic/laravel-queue-job.svg?style=flat-square)](http://isitmaintained.com/project/softonic/laravel-queue-job "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/softonic/laravel-queue-job.svg?style=flat-square)](http://isitmaintained.com/project/softonic/laravel-queue-job "Percentage of issues still open")
 
-Custom Job implementation for vyuldashev@laravel-queue-rabbitmq library
+Custom Job implementation for [vyuldashev/laravel-queue-rabbitmq](https://github.com/vyuldashev/laravel-queue-rabbitmq) library
+
+:warning: This library works on [vyuldashev/laravel-queue-rabbitmq](https://github.com/vyuldashev/laravel-queue-rabbitmq).
+If you have questions about how to configure connections, feel free to read the [vyuldashev/laravel-queue-rabbitmq](https://github.com/vyuldashev/laravel-queue-rabbitmq) documentation.
 
 Main features
 -------------
 
-* 
+* Add support to have multiple Handlers for the same Routing key.
+* Assign your Routing keys with your Handlers in the queue config file.
 
 Installation
 -------------
@@ -23,11 +27,57 @@ You can require the last version of the package using composer
 composer require softonic/laravel-queue-job
 ```
 
-### Configuration
+Usage
+-------------
 
-```php
+Replace your RabbitMQJob class in the queue config file.
+```
+'connections' => [
+    // ...
+
+    'rabbitmq' => [
+        // ...
+
+        'options' => [
+            'queue' => [
+                // ...
+
+                'job' => \Softonic\LaravelQueueJob\RabbitMQJob::class,
+            ],
+        ],
+    ],
+
+    // ...    
+],
+```
+
+Add your message_handlers mapping in queue config file:
 
 ```
+'message_handlers' => [
+        TestHandler::class => [ // Handler
+            '#.test_v1.created.testevent', // Routing keys
+            '#.test_v1.replaced.testevent',
+            '#.test_v1.updated.testevent',
+            'global.test_v1.updated.testevent',
+            // ...
+        ],
+        AnotherTestHandler::class => [
+            '#.test_v1.created.testevent',
+            'global.test_v1.updated.testevent',
+            // ...
+        ],
+        // ...
+    ],
+```
+
+Testing with artisan
+-------
+
+Your 
+``
+php artisan queue:work {connection-name} --queue={queue-name}
+``
 
 Testing
 -------
