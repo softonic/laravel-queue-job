@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: composer/composer:1.10.23
 
     steps:
     - uses: actions/checkout@v2
