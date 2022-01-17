@@ -9,7 +9,7 @@
     "issues": "https://github.com/softonic/laravel-queue-job/issues"
   },
   "require": {
-    "php": "^8.0",
+    "php": "8.0.0",
     "laravel/framework": "^8.75",
     "vladimir-yuldashev/laravel-queue-rabbitmq": "^11.3"
   },
