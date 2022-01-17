@@ -9,7 +9,7 @@
     "issues": "https://github.com/softonic/laravel-queue-job/issues"
   },
   "require": {
-    "php": "8.0.0",
+    "php": "^8.0",
     "laravel/framework": "^8.75",
     "vladimir-yuldashev/laravel-queue-rabbitmq": "^11.3"
   },
@@ -38,7 +38,7 @@
     ],
     "phpunit": "phpunit --coverage-text",
     "checkstyle": [
-      "php-cs-fixer fix -v --diff --dry-run --allow-risky=yes",
+      "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix -v --diff --dry-run --allow-risky=yes",
       "rector --dry-run"
     ],
     "fix-checkstyle": [
