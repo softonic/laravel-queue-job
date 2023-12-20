@@ -10,7 +10,7 @@ class RabbitMQQueueWithDeclare extends RabbitMQQueue
 {
     public function __construct(AbstractConnection $connection, string $default, array $options = [])
     {
-        parent::__construct($connection, $default, $options);
+        parent::__construct($connection, $default, false, $options);
 
         $this->declareQueue($this->getQueue(), true, false, $this->getQueueArguments($this->getQueue()));
 
