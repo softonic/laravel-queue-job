@@ -5,17 +5,22 @@ namespace Softonic\LaravelQueueJob;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Queue;
+use Mockery;
 use Orchestra\Testbench\TestCase;
+use Override;
 use PhpAmqpLib\Message\AMQPMessage;
+use PHPUnit\Framework\Attributes\Test;
 use VladimirYuldashev\LaravelQueueRabbitMQ\Queue\RabbitMQQueue;
 
 class RabbitMQJobTest extends TestCase
 {
     private Container $containerMock;
+
     private RabbitMQQueue $rabbitmqMock;
+
     private AMQPMessage $amqpMessageMock;
 
-    private const MESSAGE_HANDLERS = [
+    private const array MESSAGE_HANDLERS = [
         'message_handlers' => [
             TestHandlerOne::class => [
                 '#.test_v1.handle_test_1',
@@ -30,21 +35,22 @@ class RabbitMQJobTest extends TestCase
         ],
     ];
 
-    public function setUp(): void
+    #[Override]
+    protected function setUp(): void
     {
         parent::setUp();
 
         Queue::fake();
 
-        $this->containerMock   = \Mockery::mock(Container::class);
-        $this->rabbitmqMock    = \Mockery::mock(RabbitMQQueue::class);
-        $this->amqpMessageMock = \Mockery::mock(AMQPMessage::class);
+        $this->containerMock   = Mockery::mock(Container::class);
+        $this->rabbitmqMock    = Mockery::mock(RabbitMQQueue::class);
+        $this->amqpMessageMock = Mockery::mock(AMQPMessage::class);
 
         Config::set('queue', self::MESSAGE_HANDLERS);
     }
 
-    /** @test */
-    public function whenGetPayloadItShouldReturnTheFirstJobFound()
+    #[Test]
+    public function whenGetPayloadItShouldReturnTheFirstJobFound(): void
     {
         $this->amqpMessageMock
             ->shouldReceive('getRoutingKey')
@@ -65,8 +71,8 @@ class RabbitMQJobTest extends TestCase
         $this->assertEquals(TestHandlerOne::class, $rabbitMqJob->payload()['job']);
     }
 
-    /** @test */
-    public function whenGetPayloadItShouldReturnTheCorrectJob()
+    #[Test]
+    public function whenGetPayloadItShouldReturnTheCorrectJob(): void
     {
         $this->amqpMessageMock
             ->shouldReceive('getRoutingKey')
@@ -87,8 +93,8 @@ class RabbitMQJobTest extends TestCase
         $this->assertEquals(TestHandlerTwo::class, $rabbitMqJob->payload()['job']);
     }
 
-    /** @test */
-    public function whenGetPayloadItShouldReturnTheExpectedPayload()
+    #[Test]
+    public function whenGetPayloadItShouldReturnTheExpectedPayload(): void
     {
         $this->amqpMessageMock
             ->shouldReceive('getRoutingKey')
@@ -118,8 +124,8 @@ class RabbitMQJobTest extends TestCase
         );
     }
 
-    /** @test */
-    public function whenFireItShouldDispatchAllHandlers()
+    #[Test]
+    public function whenFireItShouldDispatchAllHandlers(): void
     {
         $this->amqpMessageMock
             ->shouldReceive('getRoutingKey')
@@ -146,8 +152,8 @@ class RabbitMQJobTest extends TestCase
         Queue::assertPushed(TestHandlerTwo::class);
     }
 
-    /** @test */
-    public function whenFireWithoutAssignedHandlerItShouldNotDispatchAnyHandler()
+    #[Test]
+    public function whenFireWithoutAssignedHandlerItShouldNotDispatchAnyHandler(): void
     {
         $this->amqpMessageMock
             ->shouldReceive('getRoutingKey')

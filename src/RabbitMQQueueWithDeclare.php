@@ -3,6 +3,7 @@
 namespace Softonic\LaravelQueueJob;
 
 use Illuminate\Support\Arr;
+use Override;
 use PhpAmqpLib\Connection\AbstractConnection;
 use VladimirYuldashev\LaravelQueueRabbitMQ\Queue\RabbitMQQueue;
 
@@ -23,11 +24,12 @@ class RabbitMQQueueWithDeclare extends RabbitMQQueue
         }
     }
 
-    public function getQueueArguments(string $destination): array
+    #[Override]
+    protected function getQueueArguments(string $destination): array
     {
         $arguments = parent::getQueueArguments($destination);
 
-        if ($this->getQueueMaxLength()) {
+        if ($this->getQueueMaxLength() !== 0) {
             $arguments['x-max-length'] = $this->getQueueMaxLength();
         }
 
