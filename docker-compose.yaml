@@ -28,7 +28,7 @@ services:
     image: composer:2.2
     command: composer run tests
 
-  fixcs:
+  fix-cs:
     volumes:
     - ./:/app
     image: composer:2.2

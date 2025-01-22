@@ -41,11 +41,11 @@
       "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix -v --diff --allow-risky=yes",
       "rector process"
     ],
-    "fix-checkstyle": [
+    "fix-cs": [
       "@php-cs-fixer",
       "@rector"
     ],
-    "php-cs-fixer": "php-cs-fixer fix -v --diff --allow-risky=yes",
+    "php-cs-fixer": "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix -v --diff --allow-risky=yes",
     "rector": "rector process"
   }
 }
