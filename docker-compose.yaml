@@ -1,7 +1,35 @@
-version: '3.8'
-
 services:
-  composer:
+  php:
     volumes:
     - ./:/app
-    build: ./
+    image: composer:2.2
+
+  install:
+    volumes:
+    - ./:/app
+    image: composer:2.2
+    command: composer install --ignore-platform-req=ext-sockets
+
+  update:
+    volumes:
+    - ./:/app
+    image: composer:2.2
+    command: composer update --ignore-platform-req=ext-sockets
+
+  phpunit:
+    volumes:
+    - ./:/app
+    image: composer:2.2
+    command: composer phpunit
+
+  test:
+    volumes:
+    - ./:/app
+    image: composer:2.2
+    command: composer run tests
+
+  fixcs:
+    volumes:
+    - ./:/app
+    image: composer:2.2
+    command: composer run fix-cs

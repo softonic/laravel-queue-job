@@ -3,11 +3,12 @@
 namespace Softonic\LaravelQueueJob;
 
 use Illuminate\Support\Facades\Config;
+use Override;
 use VladimirYuldashev\LaravelQueueRabbitMQ\Queue\Jobs\RabbitMQJob as BaseJob;
 
 class RabbitMQJob extends BaseJob
 {
-    private const HANDLER_NOT_CONFIGURED_MESSAGE = 'HandlerNotConfigured';
+    private const string HANDLER_NOT_CONFIGURED_MESSAGE = 'HandlerNotConfigured';
 
     private array $messageHandlers = [];
 
@@ -16,6 +17,7 @@ class RabbitMQJob extends BaseJob
      *
      * @return array
      */
+    #[Override]
     public function payload()
     {
         $this->messageHandlers = $this->getMessageHandlers($this->getRabbitMQMessage()->getRoutingKey());
@@ -26,7 +28,8 @@ class RabbitMQJob extends BaseJob
         ];
     }
 
-    public function fire()
+    #[Override]
+    public function fire(): void
     {
         $payload = $this->payload();
 
