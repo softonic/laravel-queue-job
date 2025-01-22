@@ -87,7 +87,7 @@ Testing
 To run the tests, run the following command from the project folder.
 
 ``` bash
-$ docker composer run test
+$ docker compose run test
 ```
 
 To open a terminal in the dev environment:
