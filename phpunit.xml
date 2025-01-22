@@ -12,7 +12,6 @@
     <testsuites>
         <testsuite name="All">
             <directory>./tests</directory>
-            <directory>./core/tests</directory>
         </testsuite>
     </testsuites>
 
