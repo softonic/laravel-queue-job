@@ -36,7 +36,7 @@
       "@checkstyle",
       "@phpunit"
     ],
-    "phpunit": "phpunit --coverage-text",
+    "phpunit": "phpunit",
     "checkstyle": [
       "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix -v --diff --allow-risky=yes",
       "rector process"
