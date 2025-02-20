@@ -10,7 +10,7 @@ use VladimirYuldashev\LaravelQueueRabbitMQ\Queue\RabbitMQQueue;
 
 class RabbitMQQueueWithDeclare extends RabbitMQQueue
 {
-    public function __construct(QueueConfig $config, string $default, array $options = [])
+    public function __construct(QueueConfig $config)
     {
         parent::__construct($config);
 
@@ -27,7 +27,7 @@ class RabbitMQQueueWithDeclare extends RabbitMQQueue
         foreach ($this->getQueueRoutingKeys() as $routingKey) {
             $this->bindQueue(
                 $this->getQueue(),
-                $this->getExchange(Arr::get($options, 'exchange')),
+                $this->getExchange(Arr::get($this->getConfig(), 'exchange')),
                 $routingKey,
             );
         }
