@@ -47,11 +47,11 @@ class RabbitMQQueueWithDeclare extends RabbitMQQueue
 
     private function getQueueMaxLength(): int
     {
-        return (int) (Arr::get($this->getConfig(), 'max_length'));
+        return (int) (Arr::get($this->getConfig()->getOptions(), 'max_length'));
     }
 
     private function getQueueRoutingKeys(): array
     {
-        return Arr::get($this->getConfig(), 'routing_keys') ?: [];
+        return Arr::get($this->getConfig()->getOptions(), 'routing_keys') ?: [];
     }
 }
