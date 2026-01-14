@@ -3,7 +3,7 @@ Laravel Queue Job
 
 [![Latest Version](https://img.shields.io/github/release/softonic/laravel-queue-job.svg?style=flat-square)](https://github.com/softonic/laravel-queue-job/releases)
 [![Software License](https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/travis/softonic/laravel-queue-job/master.svg?style=flat-square)](https://travis-ci.org/softonic/glaravel-queue-job)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/softonic/laravel-queue-job/tests.yml?branch=master&style=flat-square)](https://github.com/softonic/laravel-queue-job/actions)
 [![Total Downloads](https://img.shields.io/packagist/dt/softonic/laravel-queue-job.svg?style=flat-square)](https://packagist.org/packages/softonic/laravel-queue-job)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/softonic/laravel-queue-job.svg?style=flat-square)](http://isitmaintained.com/project/softonic/laravel-queue-job "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/softonic/laravel-queue-job.svg?style=flat-square)](http://isitmaintained.com/project/softonic/laravel-queue-job "Percentage of issues still open")
@@ -12,6 +12,12 @@ Custom Job implementation for [vyuldashev/laravel-queue-rabbitmq](https://github
 
 :warning: This library works on [vyuldashev/laravel-queue-rabbitmq](https://github.com/vyuldashev/laravel-queue-rabbitmq).
 If you have questions about how to configure connections, feel free to read the [vyuldashev/laravel-queue-rabbitmq](https://github.com/vyuldashev/laravel-queue-rabbitmq) documentation.
+
+Requirements
+-------------
+
+- PHP >= 8.5
+- Laravel 12.x
 
 Main features
 -------------
@@ -82,17 +88,30 @@ php artisan queue:work {connection-name} --queue={queue-name}
 Testing
 -------
 
-`softonic/laravel-queue-job` has a [PHPUnit](https://phpunit.de) test suite, and a coding style compliance test suite using [PHP CS Fixer](http://cs.sensiolabs.org/).
+`softonic/laravel-queue-job` has a [PHPUnit](https://phpunit.de) test suite, and a coding style compliance test suite using [PHP CS Fixer](https://cs.symfony.com/).
 
-To run the tests, run the following command from the project folder.
+To run the tests:
 
-``` bash
-$ docker compose run test
+```bash
+docker compose run --rm tests
+```
+
+To run PHPUnit only:
+
+```bash
+docker compose run --rm phpunit
+```
+
+To fix code style issues:
+
+```bash
+docker compose run --rm fixcs
 ```
 
 To open a terminal in the dev environment:
-``` bash
-$ docker compose run --entrypoint=bash php
+
+```bash
+docker compose run --rm php sh
 ```
 
 License
