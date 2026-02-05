@@ -1,27 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Softonic\LaravelQueueJob;
 
 use Illuminate\Support\Arr;
 use Override;
-use PhpAmqpLib\Connection\AbstractConnection;
+use VladimirYuldashev\LaravelQueueRabbitMQ\Queue\QueueConfig;
 use VladimirYuldashev\LaravelQueueRabbitMQ\Queue\RabbitMQQueue;
 
 class RabbitMQQueueWithDeclare extends RabbitMQQueue
 {
-    public function __construct(AbstractConnection $connection, string $default, array $options = [])
+    #[Override]
+    public function __construct(QueueConfig $config)
     {
-        parent::__construct($connection, $default, false, $options);
+        parent::__construct($config);
+    }
+
+    #[Override]
+    public function setConnection(\PhpAmqpLib\Connection\AbstractConnection $connection): RabbitMQQueue
+    {
+        parent::setConnection($connection);
 
         $this->declareQueue($this->getQueue(), true, false, $this->getQueueArguments($this->getQueue()));
 
         foreach ($this->getQueueRoutingKeys() as $routingKey) {
             $this->bindQueue(
                 $this->getQueue(),
-                $this->getExchange(Arr::get($options, 'exchange')),
+                $this->getExchange($this->getConfigExchange()),
                 $routingKey,
             );
         }
+
+        return $this;
     }
 
     #[Override]
@@ -38,11 +49,16 @@ class RabbitMQQueueWithDeclare extends RabbitMQQueue
 
     private function getQueueMaxLength(): int
     {
-        return (int) (Arr::get($this->options, 'max_length'));
+        return (int) Arr::get($this->getRabbitMQConfig()->getOptions(), 'max_length', 0);
     }
 
     private function getQueueRoutingKeys(): array
     {
-        return Arr::get($this->options, 'routing_keys') ?: [];
+        return Arr::get($this->getRabbitMQConfig()->getOptions(), 'routing_keys', []);
+    }
+
+    private function getConfigExchange(): ?string
+    {
+        return Arr::get($this->getRabbitMQConfig()->getOptions(), 'exchange');
     }
 }
