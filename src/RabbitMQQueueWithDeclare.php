@@ -9,19 +9,18 @@ use VladimirYuldashev\LaravelQueueRabbitMQ\Queue\RabbitMQQueue;
 
 class RabbitMQQueueWithDeclare extends RabbitMQQueue
 {
-    public function __construct(AbstractConnection $connection, string $default, array $options = [])
+    #[Override]
+    public function setConnection(AbstractConnection $connection): RabbitMQQueue
     {
-        parent::__construct($connection, $default, false, $options);
+        parent::setConnection($connection);
 
         $this->declareQueue($this->getQueue(), true, false, $this->getQueueArguments($this->getQueue()));
 
         foreach ($this->getQueueRoutingKeys() as $routingKey) {
-            $this->bindQueue(
-                $this->getQueue(),
-                $this->getExchange(Arr::get($options, 'exchange')),
-                $routingKey,
-            );
+            $this->bindQueue($this->getQueue(), $this->getExchange(), $routingKey);
         }
+
+        return $this;
     }
 
     #[Override]
@@ -29,7 +28,7 @@ class RabbitMQQueueWithDeclare extends RabbitMQQueue
     {
         $arguments = parent::getQueueArguments($destination);
 
-        if ($this->getQueueMaxLength() !== 0) {
+        if ($this->getQueueMaxLength() > 0) {
             $arguments['x-max-length'] = $this->getQueueMaxLength();
         }
 
@@ -38,11 +37,11 @@ class RabbitMQQueueWithDeclare extends RabbitMQQueue
 
     private function getQueueMaxLength(): int
     {
-        return (int) (Arr::get($this->options, 'max_length'));
+        return (int) (Arr::get($this->getRabbitMQConfig()->getOptions(), 'max_length'));
     }
 
     private function getQueueRoutingKeys(): array
     {
-        return Arr::get($this->options, 'routing_keys') ?: [];
+        return Arr::wrap(Arr::get($this->getRabbitMQConfig()->getOptions(), 'routing_keys') ?: []);
     }
 }
