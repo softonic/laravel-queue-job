@@ -77,6 +77,45 @@ Add your message_handlers mapping in queue config file:
     ],
 ```
 
+Declaring the queue on startup
+-------------
+
+If you want the queue to be declared and bound to your routing keys automatically when the connection is opened
+(useful in local/dev environments), use `RabbitMQQueueWithDeclare` as the worker of your connection:
+
+```
+'connections' => [
+    // ...
+
+    'rabbitmq' => [
+        // ...
+
+        'worker' => \Softonic\LaravelQueueJob\RabbitMQQueueWithDeclare::class,
+
+        'options' => [
+            'queue' => [
+                // ...
+
+                'exchange'     => 'my-exchange',
+                'routing_keys' => [ // An array, or a string for a single routing key
+                    '#.test_v1.created.testevent',
+                    'global.test_v1.updated.testevent',
+                ],
+                'max_length'   => 1000, // Optional. Adds x-max-length when greater than 0
+            ],
+        ],
+    ],
+
+    // ...
+],
+```
+
+The queue is declared as durable and bound to the configured exchange once per resolved connection.
+
+:warning: This happens in every process that resolves the connection, not only in `queue:work`.
+If the queue already exists with different arguments (e.g. another `max_length`), RabbitMQ rejects the declaration
+with a `PRECONDITION_FAILED` error.
+
 Testing with artisan
 -------
 
